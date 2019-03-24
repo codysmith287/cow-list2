@@ -31,7 +31,7 @@ connection.connect(err => {
 })
 
 //================ CORS HEADERS ==================//
-var defaultCorsHeaders = {
+let defaultCorsHeaders = {
   'access-control-allow-origin': '*',
   'access-control-allow-methods': 'GET, POST, PUT, DELETE, OPTIONS',
   'access-control-allow-headers': 'content-type, accept, x-parse-application-id',
@@ -44,7 +44,9 @@ app.get('/api/cows', function(req, res) {
 
   console.log(`${req.method} received`);
 
-  connection.query('SELECT * FROM cow_list', (err, results) => {
+  let queryStr = 'SELECT * FROM cow_list'
+
+  connection.query(queryStr, (err, results) => {
     if (err) {
       console.error('select all query attempt failed');
     }
@@ -52,6 +54,30 @@ app.get('/api/cows', function(req, res) {
       res.status(200);
       res.send(results);
   })
+})
+
+app.post('/api/cows', (req, res) => {
+
+  console.log(`${req.method} received`);
+
+  const newCow = req.body;
+
+  console.log(typeof newCow.name);
+  console.log(typeof newCow.description);
+
+  let params = [newCow.name, newCow.description];
+
+  let queryStr = `insert into cow_list (id, name, description) values (null, ?, ?)`;
+
+  connection.query(queryStr, params, (err, results) => {
+    if (err) {
+      console.log(`database insertion failed :( `);
+    } else {
+      console.log(`database insertion successful!`);
+      res.sendStatus(201);
+    }
+  })
+
 })
 
 app.listen(port, () => console.log(`listening on port ${port}!`))
