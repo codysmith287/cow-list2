@@ -62,9 +62,6 @@ app.post('/api/cows', (req, res) => {
 
   const newCow = req.body;
 
-  console.log(typeof newCow.name);
-  console.log(typeof newCow.description);
-
   let params = [newCow.name, newCow.description];
 
   let queryStr = `insert into cow_list (id, name, description) values (null, ?, ?)`;
@@ -77,7 +74,8 @@ app.post('/api/cows', (req, res) => {
       res.sendStatus(201);
     }
   })
-
 })
+
+app.use(express.static('client/dist'))
 
 app.listen(port, () => console.log(`listening on port ${port}!`))
