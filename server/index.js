@@ -62,6 +62,8 @@ app.post('/api/cows', (req, res) => {
 
   const newCow = req.body;
 
+  console.log(req.body);
+
   let params = [newCow.name, newCow.description];
 
   let queryStr = `insert into cow_list (id, name, description) values (null, ?, ?)`;
